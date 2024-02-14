@@ -1,43 +1,30 @@
 #include <iostream>
-#include <vector>
+#include <D:\Chrome\mysql-connector-c++-8.3.0-winx64\mysql-connector-c++-8.3.0-winx64\include\mysql\jdbc.h>
 
-int getMinimumOperations(const std::vector<int>& executionTime, int x, int y) {
-
-    int operations = 0;
-    int majorJobTime = 0;
-    int restJobsTime = 0;
-
-    for (int i = 0; i < executionTime.size(); ++i) {
-        if (i == 0) {
-            majorJobTime += x;
-        } else {
-            restJobsTime += y;
-        }
-    }
-
-    int totalJobsTime = majorJobTime + restJobsTime;
-
-    for (int time : executionTime) {
-        if (time <= majorJobTime) {
-            operations++;
-        } else {
-            int remainingTime = time - majorJobTime;
-            operations += (remainingTime + restJobsTime - 1) / restJobsTime + 1;
-        }
-    }
-
-    return operations;
-}
+using namespace std;
 
 int main() {
-    // Example usage:
-    std::vector<int> executionTime = {3, 4, 1, 7, 6};
-    int x = ; // Time executed on the major job
-    int y = 2; // Time executed on the rest of the jobs
+    try {
+        // Create a connection
+        sql::Driver *driver;
+        sql::Connection *con;
 
-    int result = getMinimumOperations(executionTime, x, y);
+        // Replace 'your_host', 'your_username', 'your_password', and 'your_database' with your MySQL server details
+        driver = get_driver_instance();
+        con = driver->connect("tcp://your_host:3306", "root", "2021");
 
-    std::cout << "Minimum number of operations: " << result << std::endl;
+        // Connect to the MySQL database
+        con->setSchema("your_database");
+
+        cout << "Connected to MySQL database successfully!" << endl;
+
+        // Clean up
+        delete con;
+
+    } catch (sql::SQLException &e) {
+        // Handle any MySQL errors
+        cout << "MySQL error: " << e.what() << endl;
+    }
 
     return 0;
 }
