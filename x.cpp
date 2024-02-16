@@ -1,30 +1,71 @@
 #include <iostream>
-#include <D:\Chrome\mysql-connector-c++-8.3.0-winx64\mysql-connector-c++-8.3.0-winx64\include\mysql\jdbc.h>
 
 using namespace std;
 
 int main() {
-    try {
-        // Create a connection
-        sql::Driver *driver;
-        sql::Connection *con;
+  // Define characters for representing different elements
+  const char water = '~';
+  const char mountain = '^';
+  const char snow = '*';
+  const char cloud = '.';
 
-        // Replace 'your_host', 'your_username', 'your_password', and 'your_database' with your MySQL server details
-        driver = get_driver_instance();
-        con = driver->connect("tcp://your_host:3306", "root", "2021");
+  // Define island size and mountain position
+  const int islandWidth = 20;
+  const int islandHeight = 10;
+  const int mountainX = islandWidth / 2;
+  const int mountainY = islandHeight / 2;
 
-        // Connect to the MySQL database
-        con->setSchema("your_database");
-
-        cout << "Connected to MySQL database successfully!" << endl;
-
-        // Clean up
-        delete con;
-
-    } catch (sql::SQLException &e) {
-        // Handle any MySQL errors
-        cout << "MySQL error: " << e.what() << endl;
+  // Print top half of the island (water)
+  for (int i = 0; i < islandHeight / 2; i++) {
+    for (int j = 0; j < islandWidth; j++) {
+      cout << water;
     }
+    cout << endl;
+  }
 
-    return 0;
+  // Print mountain base
+  for (int i = 0; i < mountainY; i++) {
+    for (int j = 0; j < islandWidth; j++) {
+      if (j >= mountainX - i && j <= mountainX + i) {
+        cout << mountain;
+      } else {
+        cout << water;
+      }
+    }
+    cout << endl;
+  }
+
+  // Print mountain peak with snow
+  for (int i = 0; i < mountainY / 2; i++) {
+    for (int j = 0; j < islandWidth; j++) {
+      if (j >= mountainX - (mountainY / 2 - i) && j <= mountainX + (mountainY / 2 - i)) {
+        cout << snow;
+      } else {
+        cout << water;
+      }
+    }
+    cout << endl;
+  }
+
+  // Print clouds around the peak
+  for (int i = 0; i < mountainY / 4; i++) {
+    for (int j = 0; j < islandWidth; j++) {
+      if (j >= mountainX - (mountainY / 4 + i) && j <= mountainX + (mountainY / 4 + i)) {
+        cout << cloud;
+      } else {
+        cout << water;
+      }
+    }
+    cout << endl;
+  }
+
+  // Print bottom half of the island (water)
+  for (int i = islandHeight / 2; i < islandHeight; i++) {
+    for (int j = 0; j < islandWidth; j++) {
+      cout << water;
+    }
+    cout << endl;
+  }
+
+  return 0;
 }
