@@ -6,6 +6,31 @@ using namespace std ;
 class Solution {
 public:
     vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        // Using sets to get uniques elements
+        set<int> intersection;
+        for (auto x : nums1)
+        {
+            for (auto y : nums2)
+            {
+                if (y == x)
+                {
+                    intersection.insert(x);
+                    break;
+                }
+            }
+        }
+        vector<int> answer;
+        for (auto it : intersection)
+        {
+            answer.push_back(it);
+        }
+        return answer;
+    }
+};
+
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
         // unordered_map<int, int> mp;
 
         // for(auto &it: nums1) {
