@@ -12,6 +12,41 @@ struct ListNode {
 };
 
 class Solution {
+    // O(n), O(1)
+public:
+    bool isPalindrome(ListNode *head)
+    {
+        if (head->next == nullptr) return true;
+        ListNode *back = head, *forward = head;
+        while(forward && forward->next) {
+            back = back->next;
+            forward = forward->next->next;
+        }
+        ListNode* mid = new ListNode(back->val, back->next);
+        back->next = nullptr;
+
+        ListNode *headReverse = reverseLL(mid);
+        while(headReverse && head){
+            if (head->val != headReverse->val) return false;
+            head=head->next;
+            headReverse = headReverse->next;
+        }
+        return true;
+    }
+    ListNode* reverseLL(ListNode* head) {
+        if (!head) return head;
+        ListNode* prev = nullptr;
+        while(head) {
+            ListNode *temp = head->next;
+            head->next = prev;
+            prev = head;
+            head = temp;
+        }
+        return prev;
+    }
+};
+
+class Solution {
     // WA: r pointer is not being updated in backtracking
 public:
     bool solve(ListNode *l, ListNode*r) {
