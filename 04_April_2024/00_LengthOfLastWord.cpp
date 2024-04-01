@@ -3,6 +3,24 @@
 #include <bits/stdc++.h>
 using namespace std ;
 
+class Solution1 {
+public:
+    int lengthOfLastWord(string s) {
+        int ans = 0, temp = 0;
+        for(auto &it: s) {
+            if (it == ' '){
+                if (temp != 0) ans = temp;
+                temp = 0;
+            }
+            else {
+                temp++;
+            }
+        }
+        if (temp != 0) ans = temp;
+        return ans;
+    }
+};
+
 class Solution {
 public:
     vector<string> splitString(string s, char key) {
