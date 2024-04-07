@@ -5,6 +5,23 @@ using namespace std ;
 
 class Solution {
 public:
+    bool checkValidString(string s) {
+        int cmin = 0, cmax = 0;
+        for (char c : s) {
+            if (c == '(')
+                cmax++, cmin++;
+            if (c == ')')
+                cmax--, cmin = max(cmin - 1, 0);
+            if (c == '*')
+                cmax++, cmin = max(cmin - 1, 0);
+            if (cmax < 0) return false;
+        }
+        return cmin == 0;
+    }
+};
+
+class Solution {
+public:
     bool solve(string &s, int ct, int i) {
         if (i >= s.size()){
             return ct == 0;
