@@ -3,6 +3,36 @@
 #include <bits/stdc++.h>
 using namespace std ;
 
+class Solution1 {
+public:
+    int islandPerimeter(vector<vector<int>>& grid) {
+        int m = grid.size(), n = grid[0].size();
+
+        int perimeter = 0;
+        vector<int> shiftRow = {-1, 0, 1, 0}, shiftCol = {0, 1, 0, -1};
+
+        for(int i = 0; i < m; ++i) {
+            for(int j = 0; j < n; ++j) {
+                if (grid[i][j]) {
+                    for(int k = 0; k < 4; ++k) {
+                        int newRow = i + shiftRow[k];
+                        int newCol = j + shiftCol[k];
+                        if (newCol >= 0 && newRow >= 0 && newRow < m && newCol < n) {
+                            if (!grid[newRow][newCol]) {
+                                ++perimeter;
+                            }
+                        }
+                        else {
+                            ++perimeter;
+                        }
+                    }
+                }
+            }
+        }
+        return perimeter;        
+    }
+};
+
 class Solution {
 public:
     int islandPerimeter(vector<vector<int>>& grid) {
