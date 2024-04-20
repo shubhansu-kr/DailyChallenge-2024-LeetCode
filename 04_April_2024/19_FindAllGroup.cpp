@@ -5,18 +5,18 @@ using namespace std ;
 
 class Solution {
 public:
-    pair<int, int> traverse(vector<vector<int>> &land, vector<vector<bool>> &vis, int r1, int c1) {
+    pair<int, int> traverse(vector<vector<int>> &land, vector<vector<bool>> &vis, int &r1, int &c1) {
         int m = land.size(), n = land[0].size();
 
         pair<int, int> p;
         int r2 = r1, c2 = c1;
 
-        while(r2 < m && land[r2++][c2]);
-        while(c2 < n && land[r2][c2++]);
+        for(; r2 < m; ++r2){ if (!land[r2][c1]) break; }
+        for(; c2 < n; ++c2){ if (!land[r1][c2]) break; }
 
         for(int i = r1; i < r2; ++i) {
             for(int j = c1; j < c2; ++j) {
-                visited[i][j] = true;
+                vis[i][j] = true;
             }
         }
 
@@ -33,12 +33,13 @@ public:
         vector<vector<bool>> visited(m, vector<bool>(n));
         for(int i = 0; i < m; ++i) {
             for(int j = 0; j < n; ++j) {
-                if (land[i][j] == 1 && !visited[i][j]) {
-                    vector<int> group = {i, j, -1, -1};
-                    // group[0] = i;
-                    // group[1] = j;
+                if (land[i][j] && !visited[i][j]) {
+                    vector<int> group(4, -1);
 
                     pair<int, int> p = traverse(land, visited, i, j);
+
+                    group[0] = i;
+                    group[1] = j;
                     group[2] = p.first;
                     group[3] = p.second;
 
