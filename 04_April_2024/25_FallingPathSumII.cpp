@@ -5,22 +5,21 @@ using namespace std ;
 
 class Solution {
 public:
-    int solve(vector<vector<int>> &grid, int i, int j) {
-        if (j >= grid.size()) return 0;
-
-        
-    }
     int minFallingPathSum(vector<vector<int>>& grid) {
-        int n = grid.size();
-
-        int ans = 0;
-        int sum = INT_MAX;
-        for(int j = 0; j < n; ++j) {
-            sum = min(sum, grid[0][j] + solve(grid, 0, j));
+        int fm = 0, sm = 0, pos = -1;
+        for (auto i = 0; i < grid.size(); ++i) {
+            auto fm2 = INT_MAX, sm2 = INT_MAX, pos2 = -1;
+            for (auto j = 0; j < grid[i].size(); ++j) {
+                auto mn = j != pos ? fm : sm;
+                if (grid[i][j] + mn < fm2) {
+                    sm2 = fm2;
+                    fm2 = grid[i][j] + mn;
+                    pos2 = j;
+                } else sm2 = min(sm2, grid[i][j] + mn);
+            }
+            fm = fm2, sm = sm2, pos = pos2;
         }
-        ans += sum;
-
-        return ans;
+        return fm;
     }
 };
 
