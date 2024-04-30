@@ -3,25 +3,39 @@
 #include <bits/stdc++.h>
 using namespace std ;
 
+#pragma GCC optimize("O3", "unroll-loops")
 class Solution {
-    public long wonderfulSubstrings(String word) {
-        long[] cnt = new long[1024]; 
-        cnt[0] = 1; 
-        int mask = 0; 
-        long ans = 0;
-        char[] chars = word.toCharArray();
-        for (char c : chars) {
-            int idx = c - 'a';
-            mask ^= 1 << idx; 
-            ans += cnt[mask]; 
-            for (int i = 1; i <= 512; i*=2) {
-                ans += cnt[mask ^ i];
-            }
-            cnt[mask]++; 
+public:
+    long long wonderfulSubstrings(string& word) {
+        uint16_t freq[1024] = {0}; 
+        bitset<10> charSet=0;
+        vector<uint16_t> prefix={0};
+        vector<char> chars;
+        uint16_t sum = 0;
+        freq[0] = 1; 
+        for (int c : word) {
+            int index = c - 'a';
+            if (charSet[index]==0) chars.push_back(index);
+            charSet[index]=1;
+            sum ^= (1 << index);
+            freq[sum]++;
+            if (freq[sum]==1) prefix.push_back(sum);
         }
-        return ans;
+
+        long long cnt = 0, cnt1 = 0;
+        for (auto i: prefix) { 
+            long long f=freq[i];
+            if (f == 0)
+                continue;
+            cnt += f*(f-1) / 2; 
+            for (char b: chars) {
+                int j=i^(1<< b);
+                cnt1+=f*freq[j]; 
+            }
+        }
+        return cnt + cnt1 / 2;
     }
-}
+};
 
 auto init = []() {
     ios::sync_with_stdio(0);
