@@ -3,50 +3,41 @@
 #include <bits/stdc++.h>
 using namespace std ;
 
-class Trie {
-public:
-    bool terminal;
-    Trie* next[26]; // Array of pointers to child nodes (one for each letter)
-
-    Trie() {
-        terminal = false;
-        for (int i = 0; i < 26; i++) {
-            next[i] = NULL;
-        }
-    }
-};
-
 class Solution {
-    Trie* root = new Trie(); // Root node of the trie
-
 public:
+    Trie* root;
+
+    Solution() {
+        root = new Trie();
+    }
+
     void insert(string word) {
-        Trie* curr = root;
+        Trie* node = root;
         for (char c : word) {
-            int index = c - 'a';
-            if (!curr->next[index]) {
-                curr->next[index] = new Trie();
+            int i = c - 'a';
+            if (node->children[i] == nullptr) {
+                node->children[i] = new Trie();
             }
-            curr = curr->next[index];
+            node = node->children[i];
         }
-        curr->terminal = true;
+        node->isEnd = true;
     }
 
     string search(string word) {
-        Trie* curr = root;
-        int rootLength = 0;
-        for (int i = 0; i < word.length(); i++) {
-            char c = word.charAt(i);
-            int index = c - 'a';
-            if (!curr->next[index]) {
-                return ""; // No root found
+        Trie* node = root;
+        string result;
+        for (char c : word) {
+            int i = c - 'a';
+            if (node->children[i] == nullptr) {
+                return word;
             }
-            curr = curr->next[index];
-            if (curr->terminal) {
-                rootLength = i + 1; // Update shortest root length if found
+            result += c;
+            if (node->children[i]->isEnd) {
+                return result;
             }
+            node = node->children[i];
         }
-        return word.substring(0, rootLength); // Return the shortest root substring
+        return word;
     }
 
     string replaceWords(vector<string>& dictionary, string sentence) {
@@ -54,15 +45,15 @@ public:
             insert(word);
         }
 
-        string[] words = sentence.split(" "); // Split sentence into words
-        StringBuilder result = new StringBuilder();
-
-        for (String word : words) {
-            String root = search(word);
-            result.append(root).append(" ");
+        stringstream ss(sentence);
+        string word, result;
+        while (ss >> word) {
+            if (!result.empty()) {
+                result += " ";
+            }
+            result += search(word);
         }
-
-        return result.toString().trim(); // Remove trailing whitespace
+        return result;
     }
 };
 
