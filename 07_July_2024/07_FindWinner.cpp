@@ -3,6 +3,20 @@
 #include <bits/stdc++.h>
 using namespace std ;
 
+
+
+class Solution1 {
+    // Recursive Solution
+public:
+    int solve(int n, int k) {
+        if (n == 0) return 0;
+        return (solve(n-1, k) + k) % n;
+    }
+    int findTheWinner(int n, int k) {
+        return solve(n, k) + 1;
+    }
+};
+
 class Solution {
     // BruteForce : Simulate using queue 
 public:
