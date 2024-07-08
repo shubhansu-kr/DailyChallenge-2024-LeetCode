@@ -3,7 +3,17 @@
 #include <bits/stdc++.h>
 using namespace std ;
 
-
+class Solution2 {
+    // Iterative Solution
+public: 
+    int findTheWinner(int n, int k) {
+        int prev = 0;
+        for(int i = 0; i < n; ++i) {
+            prev = (prev + k) % i;
+        }
+        return prev + 1;
+    }
+};
 
 class Solution1 {
     // Recursive Solution
