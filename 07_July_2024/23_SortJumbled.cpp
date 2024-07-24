@@ -3,6 +3,32 @@
 #include <bits/stdc++.h>
 using namespace std ;
 
+class Solution1 {
+public:
+    vector<int> map;
+    int processNum(int &k, vector<int> &mapping){
+        int currentNumber = k;
+        int mappedNumber = 0;
+        int multiplier = 1;
+        while(true) {
+            int digit = currentNumber % 10;
+            mappedNumber = mapping[digit] * multiplier + mappedNumber; 
+            multiplier *= 10;
+            currentNumber /= 10;
+
+            if (!currentNumber) break;
+        }
+        return mappedNumber;
+    }
+    vector<int> sortJumbled(vector<int>& mapping, vector<int>& nums) {
+        map = mapping;
+        sort(nums.begin(), nums.end(), [this](int i, int j) {
+            return processNum(i, map) < processNum(j, map);
+        });
+        return nums;
+    }
+};
+
 class Solution {
 public:
     unordered_map<int, int> mp;
