@@ -1,46 +1,42 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-using namespace std;
+// 
 
-int solve(int i, int j, int k, int m, vector<vector<vector<vector<int>>>>& dp, const vector<int>& a) {
-    if (dp[i][j][k][m] != -1) return dp[i][j][k][m];
-    if (k > m) return -(1 << 29); // impossible case
-    if (i > j) return 0;
-    if (i == j) {
-        if (a[i] >= k && a[i] <= m) return 1;
-        else return 0;
+#include <bits/stdc++.h>
+using namespace std ;
+
+int getMinCost(int N, vector<int> A) {
+    vector<int> dp(N, INT_MAX);
+    dp[0] = 0;
+
+    for (int i = 0; i < N; ++i) {
+        if (i + 1 < N) {
+            dp[i + 1] = min(dp[i + 1], dp[i] + 1);
+        }
+
+        for (int j = i + 1; j < N; ++j) {
+            if (A[j] % A[i] == 0) {
+                if (dp[i]+ A[i] + 1 < dp[j]){
+                    dp[j] = dp[i] + A[i] + 1;
+                }
+                A[j]++; 
+            }
+        }
     }
-    int res = 0;
-    res = max(res, solve(i+1, j-1, k, m, dp, a));
-    if (a[j] >= k)
-        res = max(res, solve(i+1, j-1, a[j], m, dp, a) + 1);
-    if (a[i] <= m)
-        res = max(res, solve(i+1, j-1, k, a[i], dp, a) + 1);
-    if (k <= a[j] && a[j] <= a[i] && a[i] <= m) {
-        res = max(res, solve(i+1, j-1, a[j], a[i], dp, a) + 2);
-    }
-    res = max(res, solve(i+1, j, k, m, dp, a));
-    if (a[i] >= k)
-        res = max(res, solve(i+1, j, a[i], m, dp, a) + 1);
-    res = max(res, solve(i, j-1, k, m, dp, a));
-    if (a[j] <= m)
-        res = max(res, solve(i, j-1, k, a[j], dp, a) + 1);
-    return dp[i][j][k][m] = res;
+
+    return dp[N-1];
 }
 
-int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
 
-    int n;
-    cin >> n;
-    vector<int> a(n);
-    for (int i = 0; i < n; ++i) cin >> a[i];
+auto init = []() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    return 'c';
+}();
 
-    vector<vector<vector<vector<int>>>> dp(n, vector<vector<vector<int>>>(n, vector<vector<int>>(51, vector<int>(51, -1))));
+int main () {
+    int N = 5; 
+    vector<int> A = {2, 4, 7, 11, 13, 17, 19, 23, 27, 25};
 
-    cout << solve(0, n - 1, 0, 50, dp, a) << endl;
-
+    cout << getMinCost(N, A);
     return 0;
 }
