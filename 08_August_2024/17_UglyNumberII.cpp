@@ -4,7 +4,39 @@
 using namespace std ;
 
 class Solution {
-    // WA : Does not increment in succession
+public:
+    int nthUglyNumber(int n) {
+
+        if (n == 0 || n == 1)
+            return n;
+
+        priority_queue<long, vector<long>, greater<long>> minheap;
+
+        vector<int> primes = {2, 3, 5};
+        unordered_set<long> seen;
+
+        minheap.push(1);
+        seen.insert(1);
+        long ugly = 1;
+
+        for (int i = 0; i < n; i++) {
+            ugly = minheap.top();
+            minheap.pop();
+
+            for (int prime : primes) {
+                long nextugly = ugly * prime;
+                if (seen.find(nextugly) == seen.end()) {
+                    minheap.push(nextugly);
+                    seen.insert(nextugly);
+                }
+            }
+        }
+        return (int)ugly;
+    }
+};
+
+class Solution {
+    // WA : Does not increment in succession: Use Min Heap instead
 public:
     int nthUglyNumber(int n) {
         vector<int> ugly(1, 1);
